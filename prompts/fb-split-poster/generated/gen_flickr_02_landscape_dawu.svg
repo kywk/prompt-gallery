@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1066" width="800" height="1066">
+  <defs>
+    <linearGradient id="gradTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gradArt" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fefce8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fef08a;stop-opacity:0.8" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="1066" fill="#0b0f19"/>
+  <!-- Upper Half: Photographic Subject -->
+  <rect x="30" y="30" width="740" height="480" rx="12" fill="url(#gradTop)"/>
+  <circle cx="400" cy="270" r="140" fill="#334155" opacity="0.4"/>
+  <circle cx="400" cy="270" r="85" fill="#38bdf8" opacity="0.25"/>
+  <text x="400" y="240" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="28" fill="#38bdf8" text-anchor="middle" font-weight="700">
+    [ PHOTOGRAPHIC SUBJECT ]
+  </text>
+  <text x="400" y="280" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22" fill="#f8fafc" text-anchor="middle">
+    高山風景 (Landscape)
+  </text>
+  <text x="400" y="320" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" fill="#94a3b8" text-anchor="middle">
+    北大武 • 雲海雲瀑・聖境北大武
+  </text>
+
+  <!-- Split Divider -->
+  <line x1="40" y1="535" x2="760" y2="535" stroke="#f43f5e" stroke-width="3" stroke-dasharray="10 6"/>
+
+  <!-- Lower Half: Abstract / Risograph Minimalist Interpretation -->
+  <rect x="30" y="555" width="740" height="480" rx="12" fill="url(#gradArt)" filter="url(#shadow)"/>
+  
+  <circle cx="260" cy="760" r="120" fill="#f43f5e" opacity="0.85"/>
+  <rect x="370" y="670" width="160" height="210" fill="#0284c7" opacity="0.85" rx="12" transform="rotate(12 450 775)"/>
+  <polygon points="560,840 670,660 730,840" fill="#f59e0b" opacity="0.9"/>
+  <path d="M 100 890 Q 400 700 700 890" stroke="#0f172a" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+  <!-- Editorial Typography -->
+  <text x="60" y="605" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#e11d48" font-weight="900" letter-spacing="3">AI SPLIT POSTER SERIES</text>
+  <text x="60" y="635" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22" fill="#0f172a" font-weight="800">
+    REINTERPRETED SILHOUETTE: 雲海雲瀑・聖境北大武
+  </text>
+  <text x="60" y="990" font-family="Courier, monospace" font-size="13" fill="#334155" font-weight="600">
+    SWISS EDITORIAL LAYOUT • RISOGRAPH PRINT AESTHETIC
+  </text>
+  <text x="60" y="1012" font-family="Courier, monospace" font-size="11" fill="#64748b">
+    Source: Flickr (kywk) | Subject: 北大武
+  </text>
+</svg>

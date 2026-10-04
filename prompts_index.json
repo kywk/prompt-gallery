@@ -804,5 +804,203 @@
         "generated_image": "prompts/ghibli-watercolor/generated/gen_unsplash_10_night.jpg"
       }
     ]
+  },
+  {
+    "id": "second-life",
+    "folder": "second-life",
+    "title": "簡單的幾何形狀、線條、色塊和留白",
+    "author": "",
+    "source_url": "https://www.facebook.com/share/p/1DTDjRaNDx/",
+    "model": "Antigravity / Gemini 3 Pro",
+    "tags": [
+      "現代設計",
+      "幾何"
+    ],
+    "date": "2026-10-04",
+    "summary": "這組 Prompt 的核心特色一句話簡述。",
+    "prompt_text": "",
+    "markdown_body": "## Prompt 提示詞\n\n\\`\\`\\`text\nCreate a separate, independent premium minimalist design poster from each photo I upload. Do not combine multiple photos; output each photo separately. Use an overall 3:4 vertical composition, with the upper and lower sections strictly divided 1:1, each occupying exactly 50% of the image height. In the upper half, preserve the original photograph, maintaining the subject's structure, realistic texture, natural lighting and shadows, and original color atmosphere. Apply only subtle, sophisticated color grading to give it the exhibition quality of art photography and independent publishing. To adapt the image to the format, naturally extend the sky, ground, or surrounding environment when necessary, but never stretch, distort, or alter the subject. In the lower half, do not copy the photograph or retain every object. Extract only the most recognizable subjects, silhouettes, structures, poses, and narrative relationships, then reconstruct them around the original image's meaning, emotion, symbolism, cultural associations, psychological tension, and deeper metaphors. Remove irrelevant details and compress the real scene into a memorable visual symbol so that the result does not merely retell the photograph but becomes an independent moment derived from it. Use the visual language of abstract architectural illustration, geometric collage, playful modernism, and contemporary editorial illustration. Build the composition from abstract architectural silhouettes, geometric forms, flat structures, a small number of color modules, and symbolic elements. Do not pursue a complete realistic scene; instead emphasize silhouette, proportion, structural relationships, and spatial suggestion. Reinterpret architecture, people, animals, plants, objects, or natural landscapes as recognizable visual symbols, creating a quiet and poetic space between reality and imagination. Emphasize Gestalt-based reduction, negative-space design, and editorial order. Retain only one core visual anchor and deliberately remove the remaining information. The subject may be off-center, aligned to an edge, suspended, or partially cropped according to the original image's direction, proportions, and visual center of gravity. Preserve generous negative space, allowing emptiness to represent air, distance, time, and imagination, giving a small number of forms greater emotional density and visual tension. Combine modern design language with a subtle handmade quality. Use clean geometric shapes, soft flat planes, fine lines, and slightly irregular edges to balance organic geometry with playful minimalism. Avoid excessive detail and make the forms feel like an art-directed system of symbols rather than a traced or redrawn photograph. For the color palette, extract and reinterpret the brightest, freshest, and most lively colors from the upper photograph rather than averaging all colors. Increase overall brightness and color clarity, using naturally derived hues such as clear sky blue, aqua, fresh green, warm yellow, coral orange, and peach pink. Create a refreshing warm-cool relationship with a gentle, uplifting feeling. Use abundant clean warm white as breathing space. Keep the main colors vivid but never harsh, with touches of warm orange, golden yellow, or pink functioning like small accents of sunlight. The overall color spirit should feel bright, lively, warm, light, and full of life. Avoid muddy gray tones, aged or faded palettes, overly subdued Morandi colors, dark brown filters, fluorescent colors, and cheap candy-like palettes. Keep the overall background extremely light, clean, and transparent, intelligently matching warm white, ivory, or a subtly tinted background to the original photograph. Make the subject feel like a visual symbol within premium branding, an architectural poster, or an art publication. Keep the composition quiet and restrained, without meaningless decoration. Introduce typography sparingly, generating a short title, number, or micro-annotation based on the subject, location, emotion, cultural meaning, or symbolism. Use small, restrained typography with a contemporary editorial character, similar to information labels in premium brand identities, architecture magazines, or art exhibitions. Integrate the text naturally with the negative space and main subject without allowing it to dominate. Reference the visual sophistication of international design studios, architectural posters, contemporary brand identity systems, and art publications, combining architectural abstraction, geometric poetry, quiet playfulness, modern order, and imaginative space. Final goal: even an ordinary or imperfect original photograph should be transformed into a beautiful, restrained, and enduring visual moment. Avoid photorealistic rendering in the lower half, complete replication of the photograph, complicated backgrounds, information overload, cartoon aesthetics, excessive decoration, template-like poster design, cheap children's design aesthetics, and generic flat illustration.\n\\`\\`\\`\n\n## 創作原理與適配建議\n說明這組 Prompt 適合哪些照片題材，以及使用時的注意事項。\n```",
+    "items": [
+      {
+        "id": "flickr_01_portrait",
+        "theme": "人像攝影 (Portrait)",
+        "subtheme": "和服少女・京都夢",
+        "title": "0001_original",
+        "source": "Flickr (kywk)",
+        "original_image": "photos/flickr/flickr_01_portrait_kyoto.jpg",
+        "generated_image": "prompts/second-life/generated/gen_flickr_01_portrait_kyoto.jpg"
+      },
+      {
+        "id": "flickr_02_landscape",
+        "theme": "高山風景 (Landscape)",
+        "subtheme": "雲海雲瀑・聖境北大武",
+        "title": "北大武",
+        "source": "Flickr (kywk)",
+        "original_image": "photos/flickr/flickr_02_landscape_dawu.jpg",
+        "generated_image": "prompts/second-life/generated/gen_flickr_02_landscape_dawu.jpg"
+      },
+      {
+        "id": "flickr_03_street",
+        "theme": "街頭紀實 (Street)",
+        "subtheme": "香港夜行・FlashMob",
+        "title": "141226-2139_0414",
+        "source": "Flickr (kywk)",
+        "original_image": "photos/flickr/flickr_03_street_hk.jpg",
+        "generated_image": "prompts/second-life/generated/gen_flickr_03_street_hk.jpg"
+      },
+      {
+        "id": "flickr_04_documentary",
+        "theme": "運動紀實 (Documentary)",
+        "subtheme": "富士山馬拉松賽事",
+        "title": "141126-0129-0980",
+        "source": "Flickr (kywk)",
+        "original_image": "photos/flickr/flickr_04_documentary_marathon.jpg",
+        "generated_image": "prompts/second-life/generated/gen_flickr_04_documentary_marathon.jpg"
+      },
+      {
+        "id": "flickr_05_travel",
+        "theme": "文化旅遊 (Travel)",
+        "subtheme": "日式歷史旅館・日光遺產",
+        "title": "日光 東觀莊 141126",
+        "source": "Flickr (kywk)",
+        "original_image": "photos/flickr/flickr_05_travel_nikko.jpg",
+        "generated_image": "prompts/second-life/generated/gen_flickr_05_travel_nikko.jpg"
+      },
+      {
+        "id": "flickr_06_pet",
+        "theme": "動物寵物 (Pet / Animal)",
+        "subtheme": "草地狂奔的毛孩",
+        "title": "141020_0759-569",
+        "source": "Flickr (kywk)",
+        "original_image": "photos/flickr/flickr_06_pet_nayana.jpg",
+        "generated_image": "prompts/second-life/generated/gen_flickr_06_pet_nayana.jpg"
+      },
+      {
+        "id": "flickr_07_architecture",
+        "theme": "建築人文 (Architecture & Interior)",
+        "subtheme": "溫潤木質書香・台中魚麗書店",
+        "title": "131019_1552-t351.jpg",
+        "source": "Flickr (kywk)",
+        "original_image": "photos/flickr/flickr_07_architecture_bookstore.jpg",
+        "generated_image": "prompts/second-life/generated/gen_flickr_07_architecture_bookstore.jpg"
+      },
+      {
+        "id": "flickr_08_food",
+        "theme": "食物特寫 (Food & Macro)",
+        "subtheme": "手沖烘焙咖啡豆靜物",
+        "title": "13cafe",
+        "source": "Flickr (kywk)",
+        "original_image": "photos/flickr/flickr_08_food_coffee.jpg",
+        "generated_image": "prompts/second-life/generated/gen_flickr_08_food_coffee.jpg"
+      },
+      {
+        "id": "flickr_09_nature",
+        "theme": "自然光影 (Nature & Lake)",
+        "subtheme": "西湖晨曦與秋色紅葉台",
+        "title": "西湖 紅葉台露營區 141129",
+        "source": "Flickr (kywk)",
+        "original_image": "photos/flickr/flickr_09_nature_lake_saiko.jpg",
+        "generated_image": "prompts/second-life/generated/gen_flickr_09_nature_lake_saiko.jpg"
+      },
+      {
+        "id": "flickr_10_adventure",
+        "theme": "海島探險 (Adventure & Coast)",
+        "subtheme": "薄荷島白沙灘與蔚藍海岸",
+        "title": "virgin island",
+        "source": "Flickr (kywk)",
+        "original_image": "photos/flickr/flickr_10_adventure_bohol.jpg",
+        "generated_image": "prompts/second-life/generated/gen_flickr_10_adventure_bohol.jpg"
+      },
+      {
+        "id": "unsplash_01_portrait",
+        "theme": "人像攝影 (Portrait)",
+        "subtheme": "自然光時尚肖像",
+        "title": "Natural Light Fashion Portrait",
+        "source": "Unsplash",
+        "original_image": "photos/unsplash/unsplash_01_portrait.jpg",
+        "generated_image": "prompts/second-life/generated/gen_unsplash_01_portrait.jpg"
+      },
+      {
+        "id": "unsplash_02_landscape",
+        "theme": "壯麗風景 (Landscape)",
+        "subtheme": "優美勝地山川與峽灣湖泊",
+        "title": "Yosemite Valley Lake & Mountains",
+        "source": "Unsplash",
+        "original_image": "photos/unsplash/unsplash_02_landscape.jpg",
+        "generated_image": "prompts/second-life/generated/gen_unsplash_02_landscape.jpg"
+      },
+      {
+        "id": "unsplash_03_street",
+        "theme": "街拍光影 (Street Photography)",
+        "subtheme": "霓虹閃爍雨夜都市街頭",
+        "title": "Rainy Neon City Night Street",
+        "source": "Unsplash",
+        "original_image": "photos/unsplash/unsplash_03_street.jpg",
+        "generated_image": "prompts/second-life/generated/gen_unsplash_03_street.jpg"
+      },
+      {
+        "id": "unsplash_04_food",
+        "theme": "精緻美食 (Food & Dessert)",
+        "subtheme": "法式手作烘焙水果派",
+        "title": "Artisan Fruit Tart & Pastry",
+        "source": "Unsplash",
+        "original_image": "photos/unsplash/unsplash_04_food.jpg",
+        "generated_image": "prompts/second-life/generated/gen_unsplash_04_food.jpg"
+      },
+      {
+        "id": "unsplash_05_documentary",
+        "theme": "職人紀實 (Documentary)",
+        "subtheme": "木工陶藝手作工坊專注身影",
+        "title": "Artisan Craftsman Workshop",
+        "source": "Unsplash",
+        "original_image": "photos/unsplash/unsplash_05_documentary.jpg",
+        "generated_image": "prompts/second-life/generated/gen_unsplash_05_documentary.jpg"
+      },
+      {
+        "id": "unsplash_06_macro",
+        "theme": "微距特寫 (Macro Close-up)",
+        "subtheme": "綠葉上晶瑩晨露與光斑",
+        "title": "Dew Drops on Emerald Green Leaf",
+        "source": "Unsplash",
+        "original_image": "photos/unsplash/unsplash_06_macro.jpg",
+        "generated_image": "prompts/second-life/generated/gen_unsplash_06_macro.jpg"
+      },
+      {
+        "id": "unsplash_07_architecture",
+        "theme": "現代建築 (Architecture)",
+        "subtheme": "摩天幾何玻璃帷幕光影",
+        "title": "Modern Skyscraper Architectural Facade",
+        "source": "Unsplash",
+        "original_image": "photos/unsplash/unsplash_07_architecture.jpg",
+        "generated_image": "prompts/second-life/generated/gen_unsplash_07_architecture.jpg"
+      },
+      {
+        "id": "unsplash_08_wildlife",
+        "theme": "野生動物 (Wildlife)",
+        "subtheme": "雪地中的紅狐特寫",
+        "title": "Red Fox Close-up in Wilderness",
+        "source": "Unsplash",
+        "original_image": "photos/unsplash/unsplash_08_wildlife.jpg",
+        "generated_image": "prompts/second-life/generated/gen_unsplash_08_wildlife.jpg"
+      },
+      {
+        "id": "unsplash_09_travel",
+        "theme": "旅行探險 (Travel & Adventure)",
+        "subtheme": "海灘日落熱氣球壯觀遠眺",
+        "title": "Tropical Ocean Beach Sunset Horizon",
+        "source": "Unsplash",
+        "original_image": "photos/unsplash/unsplash_09_travel.jpg",
+        "generated_image": "prompts/second-life/generated/gen_unsplash_09_travel.jpg"
+      },
+      {
+        "id": "unsplash_10_night",
+        "theme": "夜景星空 (Night & Astrophotography)",
+        "subtheme": "荒野高山之上的璀璨銀河",
+        "title": "Milky Way Galaxy Night Sky",
+        "source": "Unsplash",
+        "original_image": "photos/unsplash/unsplash_10_night.jpg",
+        "generated_image": "prompts/second-life/generated/gen_unsplash_10_night.jpg"
+      }
+    ]
   }
 ]

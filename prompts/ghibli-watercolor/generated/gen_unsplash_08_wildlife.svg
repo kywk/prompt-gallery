@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1066" width="800" height="1066">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1" />
+      <stop offset="60%" style="stop-color:#bae6fd;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fef08a;stop-opacity:0.9" />
+    </linearGradient>
+    <linearGradient id="hillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ade80;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#166534;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="1066" fill="#fefce8"/>
+  <!-- Sky -->
+  <rect x="25" y="25" width="750" height="1016" rx="16" fill="url(#skyGrad)"/>
+  
+  <!-- Fluffy Anime Cumulus Clouds -->
+  <circle cx="220" cy="380" r="140" fill="#ffffff" opacity="0.95"/>
+  <circle cx="360" cy="310" r="170" fill="#ffffff" opacity="0.98"/>
+  <circle cx="520" cy="360" r="150" fill="#ffffff" opacity="0.95"/>
+  <circle cx="620" cy="420" r="120" fill="#ffffff" opacity="0.9"/>
+  <circle cx="370" cy="230" r="110" fill="#ffffff" opacity="0.95"/>
+
+  <!-- Rolling Green Hills -->
+  <path d="M 25 780 Q 200 660 450 730 T 775 750 L 775 1041 L 25 1041 Z" fill="url(#hillGrad)"/>
+  <path d="M 25 860 Q 300 770 580 820 T 775 840 L 775 1041 L 25 1041 Z" fill="#15803d" opacity="0.7"/>
+
+  <!-- Warm Title Card -->
+  <rect x="120" y="470" width="560" height="170" rx="14" fill="#ffffff" opacity="0.9" stroke="#fed7aa" stroke-width="2"/>
+  <text x="400" y="520" font-family="'PingFang TC', 'Microsoft JhengHei', sans-serif" font-size="28" fill="#1e3a8a" text-anchor="middle" font-weight="bold">
+    野生動物 (Wildlife)
+  </text>
+  <text x="400" y="565" font-family="'PingFang TC', 'Microsoft JhengHei', sans-serif" font-size="20" fill="#047857" text-anchor="middle" font-weight="600">
+    雪地中的紅狐特寫
+  </text>
+  <text x="400" y="605" font-family="Courier, monospace" font-size="13" fill="#64748b" text-anchor="middle">
+    Original: Red Fox Close-up in Wilderness (Unsplash)
+  </text>
+
+  <text x="50" y="70" font-family="sans-serif" font-size="14" fill="#0369a1" font-weight="bold">GHIBLI WATERCOLOR SERIES</text>
+  <text x="50" y="1000" font-family="sans-serif" font-size="13" fill="#ffffff" font-weight="bold">HAYAO MIYAZAKI INSPIRED • SUMMER NOSTALGIA</text>
+</svg>

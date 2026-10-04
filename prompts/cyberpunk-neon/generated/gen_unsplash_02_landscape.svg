@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1066" width="800" height="1066">
+  <defs>
+    <radialGradient id="cyberGlow" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" style="stop-color:#ec4899;stop-opacity:0.4" />
+      <stop offset="50%" style="stop-color:#06b6d4;stop-opacity:0.25" />
+      <stop offset="100%" style="stop-color:#020617;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="1066" fill="#020617"/>
+  <!-- Perspective Cyber Grid -->
+  <line x1="0" y1="850" x2="800" y2="850" stroke="#06b6d4" stroke-width="2" opacity="0.4"/>
+  <line x1="0" y1="920" x2="800" y2="920" stroke="#06b6d4" stroke-width="3" opacity="0.6"/>
+  <line x1="0" y1="1000" x2="800" y2="1000" stroke="#ec4899" stroke-width="4" opacity="0.8"/>
+  <line x1="400" y1="780" x2="0" y2="1066" stroke="#06b6d4" stroke-width="2" opacity="0.5"/>
+  <line x1="400" y1="780" x2="250" y2="1066" stroke="#06b6d4" stroke-width="2" opacity="0.5"/>
+  <line x1="400" y1="780" x2="550" y2="1066" stroke="#06b6d4" stroke-width="2" opacity="0.5"/>
+  <line x1="400" y1="780" x2="800" y2="1066" stroke="#06b6d4" stroke-width="2" opacity="0.5"/>
+
+  <!-- Neon Core -->
+  <circle cx="400" cy="450" r="280" fill="url(#cyberGlow)"/>
+  <circle cx="400" cy="420" r="140" fill="none" stroke="#ec4899" stroke-width="4" opacity="0.8"/>
+  <polygon points="400,280 500,480 300,480" fill="none" stroke="#06b6d4" stroke-width="3" opacity="0.9"/>
+
+  <!-- Cyber Glitch Texts -->
+  <text x="400" y="240" font-family="'Courier New', monospace" font-size="14" fill="#06b6d4" letter-spacing="6" text-anchor="middle" font-weight="bold">
+    SYSTEM // NEO-TOKYO PROTOCOL
+  </text>
+  <text x="400" y="550" font-family="-apple-system, sans-serif" font-size="30" fill="#f8fafc" text-anchor="middle" font-weight="900" letter-spacing="2">
+    壯麗風景 (Landscape)
+  </text>
+  <text x="400" y="590" font-family="-apple-system, sans-serif" font-size="20" fill="#ec4899" text-anchor="middle" font-weight="bold">
+    優美勝地山川與峽灣湖泊
+  </text>
+  <text x="400" y="630" font-family="'Courier New', monospace" font-size="14" fill="#94a3b8" text-anchor="middle">
+    REF: Yosemite Valley Lake & Mountains [Unsplash]
+  </text>
+  
+  <text x="40" y="70" font-family="'Courier New', monospace" font-size="13" fill="#ec4899">VOLUMETRIC FOG // CHROMATIC</text>
+  <text x="610" y="70" font-family="'Courier New', monospace" font-size="13" fill="#06b6d4">BLADE RUNNER 2049</text>
+</svg>
