@@ -233,17 +233,29 @@
             box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
             background: var(--bg-card-hover);
         }
+        
+        /* 骨架屏與平滑 Lazy Loading 圖片 */
+        @keyframes skeleton-shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
         .card-cover {
             position: relative;
             aspect-ratio: 3 / 4;
-            background: #000;
+            background: #18191d linear-gradient(90deg, #18191d 25%, #23242b 50%, #18191d 75%);
+            background-size: 200% 100%;
+            animation: skeleton-shimmer 2.2s infinite ease-in-out;
             overflow: hidden;
         }
         .card-cover img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.4s ease;
+            opacity: 0;
+            transition: opacity 0.35s ease, transform 0.4s ease;
+        }
+        .card-cover img.loaded {
+            opacity: 1;
         }
         .prompt-card:hover .card-cover img {
             transform: scale(1.025);
@@ -575,7 +587,9 @@
         .frame-box {
             position: relative;
             aspect-ratio: 3 / 4;
-            background: #000;
+            background: #18191d linear-gradient(90deg, #18191d 25%, #23242b 50%, #18191d 75%);
+            background-size: 200% 100%;
+            animation: skeleton-shimmer 2.2s infinite ease-in-out;
             border-radius: var(--radius-sm);
             overflow: hidden;
             border: 1px solid var(--border-subtle);
@@ -585,7 +599,11 @@
             height: 100%;
             object-fit: cover;
             cursor: pointer;
-            transition: transform 0.3s;
+            opacity: 0;
+            transition: opacity 0.35s ease, transform 0.3s;
+        }
+        .frame-box img.loaded {
+            opacity: 1;
         }
         .frame-box:hover img {
             transform: scale(1.03);
@@ -602,11 +620,57 @@
             font-weight: 600;
             color: #e4e4e7;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 2;
         }
         .label-ai {
             background: #27272a;
             color: var(--accent-warm);
             border-color: var(--accent-warm-border);
+        }
+
+        /* 訪客作品交流與留言討論區 (Giscus) */
+        .discussion-section {
+            margin-top: 4.5rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .discussion-header {
+            margin-bottom: 1.5rem;
+        }
+        .discussion-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            margin-bottom: 0.4rem;
+        }
+        .discussion-icon {
+            font-size: 1.35rem;
+        }
+        .discussion-header h2 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .discussion-sub {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .discussion-sub kbd {
+            background: #27272a;
+            border: 1px solid var(--border-card);
+            border-radius: 3px;
+            padding: 0.1rem 0.35rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #f4f4f5;
+        }
+        .giscus-box {
+            min-height: 220px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
         }
 
         /* 關於說明 Modal (點擊 navbar 說明圖示開啟) */
@@ -826,6 +890,22 @@
             <div class="comparison-grid" id="comparisonGrid">
                 <!-- 由 JS 動態注入 20 張照片 Before/After 卡片 -->
             </div>
+
+            <!-- 訪客作品交流與留言討論區 (Giscus) -->
+            <section class="discussion-section">
+                <div class="discussion-header">
+                    <div class="discussion-title-wrap">
+                        <span class="discussion-icon">💬</span>
+                        <h2>社群實測分享與留言</h2>
+                    </div>
+                    <p class="discussion-sub">
+                        歡迎貼上您使用此 Prompt 在不同工具（Midjourney / FLUX / Imagen / SD / DALL-E）的實測成果！支援剪貼簿直接貼圖（<kbd>Ctrl</kbd>+<kbd>V</kbd>）與拖曳上傳。
+                    </p>
+                </div>
+                <div class="giscus-box" id="giscusContainer">
+                    <!-- Giscus 動態載入 -->
+                </div>
+            </section>
         </div>
     </div>
 
@@ -927,18 +1007,25 @@
                 return;
             }
 
-            grid.innerHTML = filtered.map(p => {
+            grid.innerHTML = filtered.map((p, idx) => {
                 const items = p.items || [];
                 const coverIdx = randomCoversMap[p.id] !== undefined ? randomCoversMap[p.id] : 0;
                 const coverItem = items[coverIdx] || items[0] || {};
                 const coverImg = coverItem.generated_image || coverItem.original_image || '';
 
                 const tagsHtml = (p.tags || []).slice(0, 3).map(t => `<span class="mini-tag">#${t}</span>`).join('');
+                const isPriority = idx < 3;
 
                 return `
                 <article class="prompt-card" onclick="openDetail('${p.id}')">
                     <div class="card-cover">
-                        <img src="${coverImg}" alt="${p.title}" loading="lazy" id="cover_img_${p.id}">
+                        <img src="${coverImg}" 
+                             alt="${p.title}" 
+                             loading="${isPriority ? 'eager' : 'lazy'}" 
+                             fetchpriority="${isPriority ? 'high' : 'low'}" 
+                             decoding="async" 
+                             onload="this.classList.add('loaded')"
+                             id="cover_img_${p.id}">
                         <div class="cover-badge">
                             <span>🎲 封面：</span><span>${coverItem.subtheme || coverItem.theme || '隨機挑選'}</span>
                         </div>
@@ -1006,6 +1093,9 @@
             view.classList.add('active');
             view.scrollTop = 0;
             document.body.style.overflow = 'hidden';
+
+            // 載入該 Prompt 專屬的 Giscus 討論留言串
+            loadGiscus(promptId);
         }
 
         // 渲染對比照片清單
@@ -1031,11 +1121,11 @@
                     
                     <div class="image-pair">
                         <div class="frame-box" onclick="zoomImage('${it.original_image}')" title="點擊放大原始照片">
-                            <img src="${it.original_image}" alt="Original" loading="lazy">
+                            <img src="${it.original_image}" alt="Original" loading="lazy" decoding="async" onload="this.classList.add('loaded')">
                             <span class="frame-label">原始照片</span>
                         </div>
                         <div class="frame-box" onclick="zoomImage('${it.generated_image}')" title="點擊放大 AI 生成照片">
-                            <img src="${it.generated_image}" alt="Generated" loading="lazy">
+                            <img src="${it.generated_image}" alt="Generated" loading="lazy" decoding="async" onload="this.classList.add('loaded')">
                             <span class="frame-label label-ai">AI 套用效果</span>
                         </div>
                     </div>
@@ -1058,6 +1148,35 @@
             document.getElementById('detailView').classList.remove('active');
             document.body.style.overflow = '';
             history.pushState("", document.title, window.location.pathname + window.location.search);
+        }
+
+        // 載入 Giscus 留言板 (依據不同 Prompt 自動切換 GitHub Discussions 討論串)
+        function loadGiscus(promptId) {
+            const container = document.getElementById('giscusContainer');
+            if (!container) return;
+            container.innerHTML = '<div style="text-align: center; padding: 2.5rem; color: var(--text-secondary); font-size: 0.9rem;">正在連線社群實測交流區...</div>';
+
+            const script = document.createElement('script');
+            script.src = 'https://giscus.app/client.js';
+            script.setAttribute('data-repo', 'kywk/prompt-gallery');
+            script.setAttribute('data-repo-id', 'R_kgDOU7E-kQ');
+            script.setAttribute('data-category', 'Show and tell');
+            script.setAttribute('data-category-id', 'DIC_kwDOU7E-kc4DHAGR');
+            script.setAttribute('data-mapping', 'specific');
+            script.setAttribute('data-term', `prompt-${promptId}`);
+            script.setAttribute('data-strict', '0');
+            script.setAttribute('data-reactions-enabled', '1');
+            script.setAttribute('data-emit-metadata', '0');
+            script.setAttribute('data-input-position', 'top');
+            script.setAttribute('data-theme', 'transparent_dark');
+            script.setAttribute('data-lang', 'zh-TW');
+            script.setAttribute('crossorigin', 'anonymous');
+            script.async = true;
+
+            setTimeout(() => {
+                container.innerHTML = '';
+                container.appendChild(script);
+            }, 80);
         }
 
         // 複製 Prompt
