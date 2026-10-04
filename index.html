@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Showcase Gallery — 跨題材 AI 攝影風格實驗室</title>
+    <meta name="description" content="精選 20 張不同主題代表照片（10 Flickr + 10 Unsplash），展示同組 Prompt 在人像、風景、街拍、食物、運動紀實等不同照片上的生成效果與對比。">
+    <!-- 載入離線資料，確保在 file:// 協定下亦能無縫執行 -->
+    <script src="prompts_data.js"></script>
+    <style>
+        :root {
+            /* 典雅藝廊與現代攝影展覽色調（非 AI 霓虹風） */
+            --bg-canvas: #121316;
+            --bg-surface: #18191d;
+            --bg-card: #1f2025;
+            --bg-card-hover: #26272e;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-card: rgba(255, 255, 255, 0.12);
+            --border-focus: #e2b17a;
+            
+            --text-primary: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --text-tertiary: #71717a;
+            
+            /* 暖調琥珀金石色彩，取代俗套 AI 螢光藍紫 */
+            --accent-warm: #e2b17a;
+            --accent-warm-subtle: rgba(226, 177, 122, 0.12);
+            --accent-warm-border: rgba(226, 177, 122, 0.35);
+            --accent-wood: #c2410c;
+            
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", sans-serif;
+            --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 頂部導覽列 */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(18, 19, 22, 0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .nav-brand span:first-child {
+            font-weight: 800;
+            color: #ffffff;
+        }
+        .brand-badge {
+            background: #27272a;
+            color: #e4e4e7;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.2rem 0.55rem;
+            border-radius: var(--radius-sm);
+            letter-spacing: 0.05em;
+            border: 1px solid var(--border-subtle);
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #1f2025;
+            color: #e4e4e7;
+            border: 1px solid var(--border-card);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-action:hover {
+            background: #2b2c34;
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+        .btn-icon-only {
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1;
+        }
+        .btn-shuffle.spinning .shuffle-icon {
+            transform: rotate(360deg);
+        }
+        .shuffle-icon {
+            transition: transform 0.5s ease;
+            display: inline-block;
+        }
+
+        /* 頁面主要容器 (首頁無大段文字，直奔展品) */
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 2rem 2.5rem 5rem;
+        }
+
+        /* 控制篩選列 (無橫向捲軸，自然折行) */
+        .controls-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+            background: var(--bg-surface);
+            padding: 1.25rem 1.6rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+        }
+        .controls-top-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .search-box {
+            flex: 1;
+            min-width: 260px;
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            background: #121316;
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-sm);
+            padding: 0.65rem 1rem 0.65rem 2.2rem;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus {
+            border-color: var(--border-focus);
+        }
+        .search-icon {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .stats-indicator {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .stats-indicator strong {
+            color: var(--accent-warm);
+        }
+
+        /* 標籤篩選：無橫向捲軸，自動換行排版 */
+        .filter-tags-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .tag-pill {
+            background: #23242a;
+            border: 1px solid var(--border-subtle);
+            color: #d4d4d8;
+            font-size: 0.8rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .tag-pill:hover {
+            background: #2e2f38;
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .tag-pill.active {
+            background: var(--accent-warm);
+            color: #121316;
+            border-color: var(--accent-warm);
+            font-weight: 700;
+        }
+
+        /* Prompt 列表展示牆 */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 2.2rem;
+        }
+        .prompt-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s, border-color 0.25s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .prompt-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+            background: var(--bg-card-hover);
+        }
+        .card-cover {
+            position: relative;
+            aspect-ratio: 3 / 4;
+            background: #000;
+            overflow: hidden;
+        }
+        .card-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .prompt-card:hover .card-cover img {
+            transform: scale(1.025);
+        }
+        .cover-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(18, 19, 22, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0.3rem 0.65rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #f4f4f5;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .cover-badge span:first-child {
+            color: var(--accent-warm);
+        }
+        .cover-model {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(39, 39, 42, 0.9);
+            color: #e4e4e7;
+            padding: 0.25rem 0.65rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.72rem;
+            font-weight: 600;
+            border: 1px solid var(--border-subtle);
+        }
+        .card-body {
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .card-title {
+            font-size: 1.18rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+            line-height: 1.35;
+        }
+        .card-summary {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex: 1;
+        }
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1.2rem;
+        }
+        .mini-tag {
+            background: #18191d;
+            color: var(--text-secondary);
+            font-size: 0.72rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+        }
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 0.85rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .card-cta {
+            color: var(--accent-warm);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* 詳情子頁面 / Modal */
+        .detail-view {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 19, 22, 0.97);
+            backdrop-filter: blur(25px);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 2rem 2rem 5rem;
+        }
+        .detail-view.active {
+            display: block;
+        }
+        .detail-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .detail-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 1.2rem;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            color: var(--text-primary);
+            padding: 0.55rem 1.1rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-back:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .btn-close-large {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0.2rem 0.6rem;
+            line-height: 1;
+        }
+        .btn-close-large:hover { color: var(--text-primary); }
+
+        /* 詳情上方：Prompt 中繼資訊卡 */
+        .detail-hero {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-md);
+            padding: 2.2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        .detail-meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+        .detail-title {
+            font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            line-height: 1.25;
+        }
+        .badge-model {
+            background: #27272a;
+            color: #f4f4f5;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+        }
+        .badge-source-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: #18191d;
+            color: var(--accent-warm);
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            border: 1px solid var(--accent-warm-border);
+            transition: background 0.2s;
+        }
+        .badge-source-link:hover {
+            background: var(--accent-warm-subtle);
+        }
+        .prompt-box {
+            background: #121316;
+            border: 1px solid var(--border-card);
+            border-left: 3px solid var(--accent-warm);
+            border-radius: var(--radius-sm);
+            padding: 1.2rem 1.4rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        .prompt-code {
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #f4f4f5;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .btn-copy-prompt {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #27272a;
+            color: #f4f4f5;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.35rem 0.8rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-copy-prompt:hover {
+            background: var(--accent-warm);
+            color: #121316;
+            border-color: var(--accent-warm);
+        }
+        .notes-content {
+            margin-top: 1.2rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* 20 張照片對比區 */
+        .comparison-section-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.8rem;
+        }
+        .section-heading h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .section-heading p {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+        }
+        .view-mode-tabs {
+            display: flex;
+            gap: 0.4rem;
+            background: var(--bg-card);
+            padding: 0.3rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .tab-btn.active {
+            background: #27272a;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+        }
+        .comparison-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-md);
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .comparison-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+        .theme-pill {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #e4e4e7;
+            background: #27272a;
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-sm);
+        }
+        .source-pill {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+        }
+        .comparison-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            color: var(--text-primary);
+        }
+        .comparison-sub {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        .image-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+        .frame-box {
+            position: relative;
+            aspect-ratio: 3 / 4;
+            background: #000;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+        }
+        .frame-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .frame-box:hover img {
+            transform: scale(1.03);
+        }
+        .frame-label {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            background: rgba(18, 19, 22, 0.85);
+            backdrop-filter: blur(4px);
+            padding: 0.15rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: #e4e4e7;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .label-ai {
+            background: #27272a;
+            color: var(--accent-warm);
+            border-color: var(--accent-warm-border);
+        }
+
+        /* 關於說明 Modal (點擊 navbar 說明圖示開啟) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 2500;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-md);
+            max-width: 620px;
+            width: 100%;
+            padding: 2.2rem;
+            position: relative;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+        }
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        .modal-body {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .modal-body p { margin-bottom: 1rem; }
+        .modal-body ul {
+            margin: 0.8rem 0 1.2rem 1.4rem;
+        }
+        .modal-body li {
+            margin-bottom: 0.4rem;
+        }
+        .btn-modal-close {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.6rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .btn-modal-close:hover { color: var(--text-primary); }
+
+        /* Toast 浮動提醒 */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #27272a;
+            color: #f4f4f5;
+            border: 1px solid var(--border-card);
+            padding: 0.75rem 1.4rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            z-index: 2000;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Lightbox 圖片放大檢視 */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.94);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            cursor: zoom-out;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 90vh;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            object-fit: contain;
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 0.8rem 1.2rem; }
+            .container { padding: 1.2rem 1rem 4rem; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .detail-hero { padding: 1.5rem 1.2rem; }
+            .controls-bar { padding: 1rem 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頂部導覽列 -->
+    <header class="navbar">
+        <a href="#" class="nav-brand" onclick="closeDetail(); return false;">
+            <span>PROMPT GALLERY</span>
+            <span class="brand-badge">20 THEMES</span>
+        </a>
+        <div class="nav-actions">
+            <button class="btn-action btn-shuffle" id="btnShuffle" title="隨機為各 Prompt 抽取不同封面照">
+                <span class="shuffle-icon">🎲</span>
+                <span>換封面</span>
+            </button>
+            <button class="btn-action btn-icon-only" id="btnAbout" title="展覽說明 (About)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- 主展示區：無首頁文字贅述，讓影像作品領先 -->
+    <main class="container" id="mainContainer">
+        <!-- 控制與標籤列 (無橫向捲軸，全自動換行排版) -->
+        <section class="controls-bar">
+            <div class="controls-top-row">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜尋 Prompt 關鍵詞、標籤或模型...">
+                </div>
+                <div class="stats-indicator">
+                    收錄 <strong id="statPromptsCount">4</strong> 組 Prompt，每組實測 <strong>20</strong> 張代表題材
+                </div>
+            </div>
+            
+            <!-- 標籤群：自動折行，絕無橫向滾動條 -->
+            <div class="filter-tags-wrap" id="tagFiltersContainer">
+                <button class="tag-pill active" data-tag="all">全部 Prompt</button>
+            </div>
+        </section>
+
+        <!-- Prompt 列表卡片牆 -->
+        <section class="gallery-grid" id="promptsGrid">
+            <!-- 由 JS 動態渲染各 Prompt 卡片，並隨機抽取封面照片 -->
+        </section>
+    </main>
+
+    <!-- 展覽說明彈出視窗 (點選右上角 ℹ️ 圖示開啟) -->
+    <div class="modal-overlay" id="aboutModal" onclick="closeAboutModal(event)">
+        <div class="modal-card">
+            <button class="btn-modal-close" onclick="closeAboutModal()" title="關閉">×</button>
+            <h2 class="modal-title">關於 Prompt Showcase Gallery</h2>
+            <div class="modal-body">
+                <p>在社群（如 Facebook、X 等）上常能看見許多令人驚豔的 AI Prompt 與範例效果，但不同照片在構圖、光影與主體結構上的差異，常導致同組 Prompt 套用在不同照片上呈現迥異的效果。</p>
+                <p>本專案精選 <strong>20 張不同主題代表照片</strong>（10 張 Flickr 紀實與人文 + 10 張 Unsplash 經典題材），橫跨人像、風景、街拍、食物、運動紀實、微距特寫、建築與星空：</p>
+                <ul>
+                    <li><strong>隨機探索</strong>：首頁每次載入或點擊「🎲 換封面」，會動態從每個 Prompt 的 20 張生成照中抽取一張作為封面。</li>
+                    <li><strong>全景對比</strong>：點入任一卡片可檢視完整 Prompt（一鍵複製）、原始社群出處連結、以及 20 張主題照片 Before / After 實測。</li>
+                    <li><strong>獨立結構</strong>：每個 Prompt 擁有獨立資料夾與 <code>prompt.md</code> 完整記載技術參數。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 詳情子頁面 (Prompt Detail Modal View) -->
+    <div class="detail-view" id="detailView" role="dialog" aria-modal="true">
+        <div class="detail-container">
+            <div class="detail-header-bar">
+                <button class="btn-back" onclick="closeDetail()">
+                    <span>←</span>
+                    <span>返回 Prompt 藝廊</span>
+                </button>
+                <button class="btn-close-large" onclick="closeDetail()" title="關閉 (Esc)">×</button>
+            </div>
+
+            <!-- Prompt 核心資訊卡 -->
+            <div class="detail-hero" id="detailHeroContent">
+                <!-- 由 JS 動態注入 -->
+            </div>
+
+            <!-- 20 張主題照片生成成果與對比矩陣 -->
+            <div class="comparison-section-header">
+                <div class="section-heading">
+                    <h2>20 張代表照片生成效果對比</h2>
+                    <p>觀察此 Prompt 套用於人像、風景、街拍、食物、運動紀實等不同場景下的視覺轉變</p>
+                </div>
+                <div class="view-mode-tabs">
+                    <button class="tab-btn active" data-filter="all" onclick="filterComparison('all')">全部 20 張</button>
+                    <button class="tab-btn" data-filter="flickr" onclick="filterComparison('flickr')">Flickr 代表作 (10)</button>
+                    <button class="tab-btn" data-filter="unsplash" onclick="filterComparison('unsplash')">Unsplash (10)</button>
+                </div>
+            </div>
+
+            <div class="comparison-grid" id="comparisonGrid">
+                <!-- 由 JS 動態注入 20 張照片 Before/After 卡片 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox 圖片放大檢視 -->
+    <div class="lightbox" id="lightboxModal" onclick="closeLightbox()">
+        <img id="lightboxImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Zoomed view">
+    </div>
+
+    <!-- Toast 浮動提醒 -->
+    <div class="toast" id="toastNotice">✓ 已複製 Prompt 至剪貼簿</div>
+
+    <script>
+        // 資料狀態
+        let allPrompts = [];
+        let currentPrompt = null;
+        let selectedTag = 'all';
+        let currentComparisonFilter = 'all';
+        // 儲存每個 prompt 當前隨機抽到的封面 index
+        const randomCoversMap = {};
+
+        // 載入資料
+        async function initData() {
+            if (window.PROMPTS_DATA && window.PROMPTS_DATA.length > 0) {
+                allPrompts = window.PROMPTS_DATA;
+            } else {
+                try {
+                    const res = await fetch('prompts_index.json');
+                    allPrompts = await res.json();
+                } catch (e) {
+                    console.error("無法載入 prompts_index.json:", e);
+                }
+            }
+
+            document.getElementById('statPromptsCount').textContent = allPrompts.length;
+            randomizeCovers();
+            renderTagFilters();
+            renderPromptsGrid();
+            checkUrlHash();
+        }
+
+        // 隨機在每個 prompt 圖片中隨機挑一個在首頁顯示
+        function randomizeCovers() {
+            allPrompts.forEach(p => {
+                if (p.items && p.items.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * p.items.length);
+                    randomCoversMap[p.id] = randomIndex;
+                }
+            });
+        }
+
+        // 渲染標籤篩選按鈕 (自然換行，無橫向捲軸)
+        function renderTagFilters() {
+            const container = document.getElementById('tagFiltersContainer');
+            const tagsSet = new Set();
+            allPrompts.forEach(p => {
+                (p.tags || []).forEach(t => tagsSet.add(t));
+            });
+
+            container.innerHTML = '<button class="tag-pill active" data-tag="all">全部 Prompt</button>';
+            tagsSet.forEach(tag => {
+                const btn = document.createElement('button');
+                btn.className = 'tag-pill';
+                btn.setAttribute('data-tag', tag);
+                btn.textContent = tag;
+                btn.onclick = () => {
+                    document.querySelectorAll('.tag-pill').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedTag = tag;
+                    renderPromptsGrid();
+                };
+                container.appendChild(btn);
+            });
+
+            container.querySelector('[data-tag="all"]').onclick = (e) => {
+                document.querySelectorAll('.tag-pill').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                selectedTag = 'all';
+                renderPromptsGrid();
+            };
+        }
+
+        // 渲染 Prompt 卡片牆
+        function renderPromptsGrid() {
+            const grid = document.getElementById('promptsGrid');
+            const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+
+            const filtered = allPrompts.filter(p => {
+                const matchTag = (selectedTag === 'all') || (p.tags && p.tags.includes(selectedTag));
+                const matchSearch = !searchVal || 
+                    (p.title && p.title.toLowerCase().includes(searchVal)) ||
+                    (p.prompt_text && p.prompt_text.toLowerCase().includes(searchVal)) ||
+                    (p.model && p.model.toLowerCase().includes(searchVal)) ||
+                    (p.summary && p.summary.toLowerCase().includes(searchVal));
+                return matchTag && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-secondary);">沒有符合條件的 Prompt。</div>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => {
+                const items = p.items || [];
+                const coverIdx = randomCoversMap[p.id] !== undefined ? randomCoversMap[p.id] : 0;
+                const coverItem = items[coverIdx] || items[0] || {};
+                const coverImg = coverItem.generated_image || coverItem.original_image || '';
+
+                const tagsHtml = (p.tags || []).slice(0, 3).map(t => `<span class="mini-tag">#${t}</span>`).join('');
+
+                return `
+                <article class="prompt-card" onclick="openDetail('${p.id}')">
+                    <div class="card-cover">
+                        <img src="${coverImg}" alt="${p.title}" loading="lazy" id="cover_img_${p.id}">
+                        <div class="cover-badge">
+                            <span>🎲 封面：</span><span>${coverItem.subtheme || coverItem.theme || '隨機挑選'}</span>
+                        </div>
+                        <div class="cover-model">${p.model || 'AI Model'}</div>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-title">${p.title}</h2>
+                        <p class="card-summary">${p.summary || p.prompt_text}</p>
+                        <div class="card-tags">${tagsHtml}</div>
+                        <div class="card-footer">
+                            <span>${p.items ? p.items.length : 0} 張題材實測</span>
+                            <span class="card-cta">查看詳情與對比 →</span>
+                        </div>
+                    </div>
+                </article>
+                `;
+            }).join('');
+        }
+
+        // 開啟詳情視圖
+        function openDetail(promptId) {
+            const prompt = allPrompts.find(p => p.id === promptId);
+            if (!prompt) return;
+            currentPrompt = prompt;
+
+            // 更新網址 Hash 便於直連與分享
+            window.location.hash = `prompt=${promptId}`;
+
+            // 渲染頂部中繼資料看板
+            const hero = document.getElementById('detailHeroContent');
+            const tagsHtml = (prompt.tags || []).map(t => `<span class="tag-pill" style="pointer-events: none; padding: 0.2rem 0.6rem;">#${t}</span>`).join('');
+            
+            const sourceBtnHtml = prompt.source_url ? 
+                `<a href="${prompt.source_url}" target="_blank" rel="noopener" class="badge-source-link">🔗 查看原始來源出處</a>` : '';
+
+            hero.innerHTML = `
+                <div class="detail-meta-row">
+                    <span class="badge-model">${prompt.model}</span>
+                    ${sourceBtnHtml}
+                    <span style="font-size: 0.82rem; color: var(--text-secondary);">創作者：${prompt.author || '社群精選'}</span>
+                </div>
+                <h1 class="detail-title">${prompt.title}</h1>
+                <p style="font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 1rem;">${prompt.summary || ''}</p>
+
+                <!-- Prompt 完整主文區 -->
+                <div class="prompt-box">
+                    <button class="btn-copy-prompt" onclick="copyPromptText('${prompt.id}')">📋 複製 Prompt</button>
+                    <div style="font-size: 0.8rem; color: var(--accent-warm); font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase;">PROMPT 提示詞主文</div>
+                    <pre class="prompt-code" id="promptText_${prompt.id}">${escapeHtml(prompt.prompt_text)}</pre>
+                </div>
+
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
+                    ${tagsHtml}
+                </div>
+            `;
+
+            // 渲染 20 張照片對比卡片
+            currentComparisonFilter = 'all';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('.tab-btn[data-filter="all"]').classList.add('active');
+            renderComparisonGrid();
+
+            // 顯示視圖並滾動至頂部
+            const view = document.getElementById('detailView');
+            view.classList.add('active');
+            view.scrollTop = 0;
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 渲染對比照片清單
+        function renderComparisonGrid() {
+            if (!currentPrompt || !currentPrompt.items) return;
+            const grid = document.getElementById('comparisonGrid');
+
+            const filteredItems = currentPrompt.items.filter(item => {
+                if (currentComparisonFilter === 'flickr') return item.id.includes('flickr');
+                if (currentComparisonFilter === 'unsplash') return item.id.includes('unsplash');
+                return true;
+            });
+
+            grid.innerHTML = filteredItems.map(it => {
+                return `
+                <div class="comparison-card">
+                    <div class="comparison-header">
+                        <span class="theme-pill">${it.theme}</span>
+                        <span class="source-pill">${it.source}</span>
+                    </div>
+                    <div class="comparison-title">${it.title}</div>
+                    <div class="comparison-sub">${it.subtheme}</div>
+                    
+                    <div class="image-pair">
+                        <div class="frame-box" onclick="zoomImage('${it.original_image}')" title="點擊放大原始照片">
+                            <img src="${it.original_image}" alt="Original" loading="lazy">
+                            <span class="frame-label">原始照片</span>
+                        </div>
+                        <div class="frame-box" onclick="zoomImage('${it.generated_image}')" title="點擊放大 AI 生成照片">
+                            <img src="${it.generated_image}" alt="Generated" loading="lazy">
+                            <span class="frame-label label-ai">AI 套用效果</span>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // 篩選對比照片 (全部 / Flickr / Unsplash)
+        function filterComparison(filter) {
+            currentComparisonFilter = filter;
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-filter') === filter);
+            });
+            renderComparisonGrid();
+        }
+
+        // 關閉詳情視圖
+        function closeDetail() {
+            document.getElementById('detailView').classList.remove('active');
+            document.body.style.overflow = '';
+            history.pushState("", document.title, window.location.pathname + window.location.search);
+        }
+
+        // 複製 Prompt
+        function copyPromptText(promptId) {
+            const textElem = document.getElementById(`promptText_${promptId}`);
+            if (!textElem) return;
+            navigator.clipboard.writeText(textElem.innerText).then(() => {
+                showToast("✓ 已複製 Prompt 提示詞至剪貼簿！");
+            });
+        }
+
+        // Lightbox 放大檢視
+        function zoomImage(src) {
+            if (!src) return;
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightboxModal').classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightboxModal').classList.remove('active');
+        }
+
+        // 關於說明 Modal 開關
+        function openAboutModal() {
+            document.getElementById('aboutModal').classList.add('active');
+        }
+        function closeAboutModal(e) {
+            if (!e || e.target === document.getElementById('aboutModal') || e.target.classList.contains('btn-modal-close')) {
+                document.getElementById('aboutModal').classList.remove('active');
+            }
+        }
+        document.getElementById('btnAbout').onclick = openAboutModal;
+
+        // Toast 通知
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotice');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // HTML 跳脫防護
+        function escapeHtml(str) {
+            return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // 監聽網址 Hash 變化
+        function checkUrlHash() {
+            const hash = window.location.hash;
+            if (hash.startsWith('#prompt=')) {
+                const pid = hash.replace('#prompt=', '');
+                openDetail(pid);
+            }
+        }
+        window.addEventListener('hashchange', checkUrlHash);
+
+        // 鍵盤事件支援 (Esc 鍵關閉)
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (document.getElementById('lightboxModal').classList.contains('active')) {
+                    closeLightbox();
+                } else if (document.getElementById('aboutModal').classList.contains('active')) {
+                    closeAboutModal();
+                } else if (document.getElementById('detailView').classList.contains('active')) {
+                    closeDetail();
+                }
+            }
+        });
+
+        // 綁定「隨機換封面」按鈕事件
+        document.getElementById('btnShuffle').onclick = () => {
+            const btn = document.getElementById('btnShuffle');
+            btn.classList.add('spinning');
+            randomizeCovers();
+            renderPromptsGrid();
+            showToast("🎲 已為各 Prompt 重新隨機抽取展示封面！");
+            setTimeout(() => btn.classList.remove('spinning'), 500);
+        };
+
+        // 搜尋輸入監聽
+        document.getElementById('searchInput').oninput = renderPromptsGrid;
+
+        // 初始化
+        initData();
+    </script>
+</body>
+</html>
